@@ -1,0 +1,13 @@
+.Home-parent {
+  max-width: 1200px;
+}
+
+.Home-img-splash {
+
+  width: 150px;
+  height: 150px;
+}
+
+.Home-top-child {
+  display: flex;
+}

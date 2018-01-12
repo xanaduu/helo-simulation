@@ -18,10 +18,11 @@ massive(process.env.CONNECTION_STRING)
 .then(db => app.set('db', db))
 .catch(err => console.error(err))
 
+// AUTHORIZATION //
 app.post('/api/auth/login', (req, res) => {
   const db = app.get('db'),
-        { userId } = req.body,
-        auth0Url = `https://${process.env.REACT_APP_AUTH0_DOMAIN}/api/v2/users/${userId}`
+        { auth0Id } = req.body,
+        auth0Url = `https://${process.env.REACT_APP_AUTH0_DOMAIN}/api/v2/users/${auth0Id}`
   
   axios.get(auth0Url, {
     headers: {
@@ -29,27 +30,23 @@ app.post('/api/auth/login', (req, res) => {
     }
   })
   .then(r => {
-    const userData = r.data
-    
-    req.session.user = { 
-      name: userData.name, 
-      email: userData.email, 
-      auth0_id: userData.user_id,
-      pictureUrl: userData.picture  
-    }
-    res.json({ user: req.session.user })
-    db.getUser([userData.user_id])
+    const authId = r.data.user_id
+    return db.findUserByAuth0([authId])
     .then(users => {
-      if(users.length) db.createUser([userData.user_id, userData.email, userData.picture, userData.name])
-      .then(() => console.log('added to database'))
-      .catch(err => console.error(err))
+      if(users.length) {
+        db.createUser([authId, null, null, null, null,  null, null, null, null, null])
+      } else {
+        req.session.user = {
+          auth0_id: authId
+        }
+      }
+      res.json( req.session.user )
     })
+    .catch(err => console.error(err))
   })
-  .catch(err => {
-    console.error(err)
-    res.status(500).json({ message: 'You failed.' })
-  })
+  .catch(err => console.error(err))
 }) 
+
 
 app.get('/api/auth/authenticated', (req, res) => {
   res.json({ user: req.session.user })
@@ -59,5 +56,28 @@ app.post('/api/auth/logout', (req, res) => {
   req.session.destroy();
   res.send();
 });
+// -----------//
+
+
+// req.session.user = {
+//   auth0_id: authId
+// }
+// res.json({ user: req.session.user })
+
+// FRIEND //
+// app.get('/api/friend/list')
+// app.post('/api/friend/add')
+// app.post('/api/friend/remove')
+// ---------- //
+
+// USER //
+// app.patch('/api/user/patch/:id')
+// app.get('/api/user/list')
+// app.get('/api/user/search')
+// --------- //
+
+// RECOMMENDED //
+// app.post('/api/recommended')
+// app.post('/api/recommended/add')
 
 app.listen(PORT, () => console.log('You are on Port: ' + PORT))

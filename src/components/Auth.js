@@ -12,24 +12,24 @@ class Auth extends Component {
   }
 
   componentDidMount() {
-    const { login, history } = this.props
+    // const { login, history } = this.props
 
-    console.log(this.props)
-    this.lock = new Auth0Lock(
-      process.env.REACT_APP_AUTH0_CLIENT_ID, process.env.REACT_APP_AUTH0_DOMAIN
-    )
-    this.lock.on('authenticated', authResult => {
-      this.lock.getUserInfo(authResult.accessToken, (error, user) => {
-        console.log(user)
-        axios.post('/api/auth/login', { userId: user.sub })
-        .then(r => {
-          console.log(r)
-          login(r.data.user)
-          history.push("/")
-        })
-        .catch(err => console.error(err))
-      })
-    })
+    // console.log(this.props)
+    // this.lock = new Auth0Lock(
+    //   process.env.REACT_APP_AUTH0_CLIENT_ID, process.env.REACT_APP_AUTH0_DOMAIN
+    // )
+    // this.lock.on('authenticated', authResult => {
+    //   this.lock.getUserInfo(authResult.accessToken, (error, user) => {
+    //     console.log(user)
+    //     axios.post('/api/auth/login', { auth0Id: user.sub })
+    //     .then(r => {
+    //       console.log(r)
+    //       login(r.data.user)
+    //       history.push("/")
+    //     })
+    //     .catch(err => console.error(err))
+    //   })
+    // })
   }
         
         

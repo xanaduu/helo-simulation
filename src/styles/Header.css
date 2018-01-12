@@ -1,0 +1,8 @@
+.Header-parent {
+  display: flex;
+  justify-content: space-between;
+}
+
+.Header-parent span {
+  margin: 5px;
+}

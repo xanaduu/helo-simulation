@@ -1,8 +1,8 @@
 CREATE TABLE IF NOT EXISTS users (
   user_id SERIAL PRIMARY KEY,
-  auth0_id TEXT NOT NULL,
-  firstname VARCHAR(40) NOT NULL,
-  lastname VARCHAR(80) NOT NULL,
+  auth0_id TEXT,
+  firstname VARCHAR(40),
+  lastname VARCHAR(80),
   gender VARCHAR(10),
   hair_color VARCHAR(10),
   eye_color VARCHAR(10),
